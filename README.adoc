@@ -1,0 +1,6 @@
+= Camel LDAP Demo
+
+
+
+
+ansible-playbook -e token=${token} -e server=${server} playbook.yml

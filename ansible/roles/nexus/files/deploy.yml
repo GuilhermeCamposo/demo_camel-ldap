@@ -1,0 +1,90 @@
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  name: nexus3-self-managed
+  namespace: camel-k-ldap
+  labels:
+    app: nexus3
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: nexus3
+  template:
+    metadata:
+      name: nexus3
+      namespace: camel-k-ldap
+      labels:
+        app: nexus3
+    spec:
+      restartPolicy: Always
+      schedulerName: default-scheduler
+      terminationGracePeriodSeconds: 30
+      securityContext:
+        runAsUser: 0
+      containers:
+        - resources:
+            limits:
+              cpu: '2'
+              memory: 2Gi
+            requests:
+              cpu: '1'
+              memory: 2Gi
+          readinessProbe:
+            httpGet:
+              path: /service/rest/v1/status
+              port: 8081
+              scheme: HTTP
+            initialDelaySeconds: 240
+            timeoutSeconds: 15
+            periodSeconds: 10
+            successThreshold: 1
+            failureThreshold: 3
+          terminationMessagePath: /dev/termination-log
+          name: nexus-server
+          livenessProbe:
+            httpGet:
+              path: /service/rest/v1/status
+              port: 8081
+              scheme: HTTP
+            initialDelaySeconds: 240
+            timeoutSeconds: 15
+            periodSeconds: 10
+            successThreshold: 1
+            failureThreshold: 3
+          env:
+            - name: INSTALL4J_ADD_VM_PARAMS
+              value: >-
+                -Djava.util.prefs.userRoot=${NEXUS_DATA}/javaprefs
+                -Dnexus.security.randompassword=false
+                -XX:MaxDirectMemorySize=2148m -Xms1718m -Xmx1718m 
+          ports:
+            - name: http
+              containerPort: 8081
+              protocol: TCP
+          imagePullPolicy: Always
+          volumeMounts:
+            - name: nexus3-data
+              mountPath: /nexus-data
+            - name: nexus3-config
+              mountPath: /nexus-data/etc/nexus.properties
+              subPath: nexus.properties
+          terminationMessagePolicy: File
+          image: registry.connect.redhat.com/sonatype/nexus-repository-manager
+      serviceAccount: nexus3-self-managed
+      volumes:
+        - name: nexus3-data
+          persistentVolumeClaim:
+            claimName: nexus3-test
+        - name: nexus3-config
+          configMap:
+            name: nexus3
+            items:
+              - key: nexus.properties
+                path: nexus.properties
+            defaultMode: 438
+      dnsPolicy: ClusterFirst
+  strategy:
+    type: Recreate
+  revisionHistoryLimit: 10
+  progressDeadlineSeconds: 600

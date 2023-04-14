@@ -1,0 +1,7 @@
+kind: ConfigMap
+apiVersion: v1
+metadata:
+  name: nexus3
+  namespace: camel-k-ldap
+data:
+  nexus.properties: ''

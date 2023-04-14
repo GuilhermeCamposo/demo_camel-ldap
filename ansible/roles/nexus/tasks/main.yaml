@@ -1,0 +1,32 @@
+- name: Evaluate Nexus SA
+  kubernetes.core.k8s:
+    api_key: '{{ token }}'
+    host: '{{ server }}'
+    validate_certs: '{{ verify_tls }}'
+    state: present
+    namespace: '{{ demo_project }}'
+    resource_definition: "{{ lookup('file', 'sa.yml') }}"
+
+- name: Evaluate Nexus Anyuid
+  kubernetes.core.k8s:
+    api_key: '{{ token }}'
+    host: '{{ server }}'
+    validate_certs: '{{ verify_tls }}'
+    state: present
+    resource_definition: "{{ lookup('template', 'cluster-role-binding.yml.j2') }}"
+
+
+- name: Evaluate Nexus Manifests
+  kubernetes.core.k8s:
+    api_key: '{{ token }}'
+    host: '{{ server }}'
+    validate_certs: '{{ verify_tls }}'
+    state: present
+    namespace: '{{ demo_project }}'
+    resource_definition: "{{ lookup('file', item) }}"
+  loop:
+    - cm.yml
+    - pvc.yml
+    - deploy.yml
+    - svc.yml
+    - route.yml

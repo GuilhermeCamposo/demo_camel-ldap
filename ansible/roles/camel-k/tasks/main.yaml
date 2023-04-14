@@ -1,0 +1,54 @@
+- name: Evaluate Camel K Subscription
+  kubernetes.core.k8s:
+    api_key: '{{ token }}'
+    host: '{{ server }}'
+    validate_certs: '{{ verify_tls }}'
+    state: present
+    api_version: operators.coreos.com/v1alpha1
+    kind: Subscription
+    definition:
+      metadata:
+        name: red-hat-camel-k
+        namespace: '{{ demo_project }}'
+      spec:
+        channel: 1.10.x
+        installPlanApproval: Automatic
+        name: red-hat-camel-k
+        source: redhat-operators
+        sourceNamespace: openshift-marketplace
+
+- name: Wait Camel K Operator To Be Running
+  kubernetes.core.k8s_info:
+    api_key: '{{ token }}'
+    host: '{{ server }}'
+    validate_certs: '{{ verify_tls }}'
+    api_version: v1
+    kind: Pod
+    namespace: '{{ demo_project }}'
+    label_selectors:
+      - app = camel-k
+      - name = camel-k-operator
+    field_selectors:
+      - status.phase=Running
+  register: r_camelk_operator_pod
+  retries: 120
+  delay: 10
+  until: r_camelk_operator_pod.resources | list | length == 1
+
+- name: Evaluate Maven Configmap
+  kubernetes.core.k8s:
+    api_key: '{{ token }}'
+    host: '{{ server }}'
+    validate_certs: '{{ verify_tls }}'
+    state: present
+    namespace: '{{ demo_project }}'
+    resource_definition: "{{ lookup('template', 'maven-settings.yml.j2') }}"
+
+- name: Evaluate IntegrationPlatform
+  kubernetes.core.k8s:
+    api_key: '{{ token }}'
+    host: '{{ server }}'
+    validate_certs: '{{ verify_tls }}'
+    state: present
+    namespace: '{{ demo_project }}'
+    resource_definition: "{{ lookup('file', 'integration-platform.yml') }}"

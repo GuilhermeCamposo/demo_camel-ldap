@@ -1,0 +1,11 @@
+- name: Evaluate OpenLDAP Manifests
+  kubernetes.core.k8s:
+    api_key: '{{ token }}'
+    host: '{{ server }}'
+    validate_certs: '{{ verify_tls }}'
+    state: present
+    namespace: '{{ demo_project }}'
+    resource_definition: "{{ lookup('file', item) }}"
+  loop:
+    - deployment.yml
+    - service.yml

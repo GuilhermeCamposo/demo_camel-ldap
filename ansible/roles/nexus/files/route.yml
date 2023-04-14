@@ -1,0 +1,14 @@
+kind: Route
+apiVersion: route.openshift.io/v1
+metadata:
+  name: nexus3-self-managed
+  labels:
+    app: nexus3
+spec:
+  to:
+    kind: Service
+    name: nexus3-self-managed
+    weight: 100
+  port:
+    targetPort: 8081
+  wildcardPolicy: None

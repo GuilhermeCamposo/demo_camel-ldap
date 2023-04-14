@@ -1,0 +1,17 @@
+apiVersion: camel.apache.org/v1
+kind: IntegrationPlatform
+metadata:
+  name: camel-k
+  namespace: camel-k-ldap
+spec:
+  build:
+    maven:
+      settings:
+        configMapKeyRef:
+          key: settings.xml
+          name: maven-settings
+      settingsSecurity: {}
+    registry: {}
+  kamelet: {}
+  resources: {}
+  traits: {}

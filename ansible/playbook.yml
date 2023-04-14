@@ -1,0 +1,65 @@
+- hosts: localhost
+  name: Install Camel K LDAP demo
+  vars:
+    demo_project: camel-k-ldap
+    apicurito_project: apicurito
+    verify_tls: false
+  tasks:
+    - name: Check Required Parameters
+      ansible.builtin.fail:
+        msg: "This play requires 'server' and 'token' to be defined"
+      when:
+        - (server is not defined) or (token is not defined) or (server is none) or (token is none)
+      ignore_errors: false
+
+    - name: Define domain
+      ansible.builtin.set_fact:
+        domain: "{{ server | regex_replace('https://api.') | regex_replace(':6443') }}"
+
+    - name: Set Subdomain
+      ansible.builtin.set_fact:
+        route_subdomain: "apps.{{ domain }}"
+
+    - name: Evaluate Namespace {{ demo_project }}
+      kubernetes.core.k8s:
+        api_key: '{{ token }}'
+        host: '{{ server }}'
+        validate_certs: '{{ verify_tls }}'
+        state: present
+        kind: Project
+        api_version: project.openshift.io/v1
+        definition:
+          metadata:
+            name: "{{ demo_project }}"
+
+    - name: Evaluate Operator Group
+      kubernetes.core.k8s:
+        api_key: '{{ token }}'
+        host: '{{ server }}'
+        validate_certs: '{{ verify_tls }}'
+        state: present
+        api_version: operators.coreos.com/v1
+        kind: OperatorGroup
+        definition:
+          metadata:
+            name: '{{ demo_project }}-operatorgroup'
+            namespace: '{{ demo_project }}'
+          spec:
+            targetNamespaces:
+              - '{{ demo_project }}'
+
+    - name: Include LDAP role
+      ansible.builtin.include_role:
+        name: ldap
+
+    - name: Include Nexus role
+      ansible.builtin.include_role:
+        name: Nexus
+
+    - name: Include Camel K role
+      ansible.builtin.include_role:
+        name: camel-k
+
+    - name: Include apicurito role
+      ansible.builtin.include_role:
+        name: apicurito

@@ -1,0 +1,72 @@
+apiVersion: v1
+data:
+  settings.xml: |
+    <settings xmlns="http://maven.apache.org/SETTINGS/1.0.0"
+              xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:schemaLocation="http://maven.apache.org/SETTINGS/1.0.0 http://maven.apache.org/xsd/settings-1.0.0.xsd">
+
+      <proxies></proxies>
+      <profiles>
+        <profile>
+          <id>maven-main</id>
+          <repositories>
+            <repository>
+                <id>ocp-nexus</id>
+                <url>http://nexus3-self-managed-{{ demo_project }}.apps.{{ domain }}/repository/camel-k</url>
+                <snapshots>
+                  <enabled>true</enabled>
+                </snapshots>
+                <releases>
+                  <enabled>true</enabled>
+                </releases>
+            </repository>
+            <repository>
+                <id>jboss-ga-repository</id>
+                <url>https://maven.repository.redhat.com/ga</url>
+                <releases>
+                  <enabled>true</enabled>
+                </releases>
+                <snapshots>
+                  <enabled>true</enabled>
+                </snapshots>
+              </repository>
+            <repository>
+              <id>maven-central</id>
+              <url>https://repo1.maven.org/maven2/</url>
+              <releases />
+              <snapshots>
+                  <enabled>false</enabled>
+              </snapshots>
+            </repository>
+          </repositories>
+          <pluginRepositories>
+            <pluginRepository>
+              <id>maven-central</id>
+              <url>https://repo1.maven.org/maven2/</url>
+              <releases />
+              <snapshots>
+                  <enabled>false</enabled>
+              </snapshots>
+            </pluginRepository>
+            <pluginRepository>
+              <id>jboss-ga-plugin-repository</id>
+              <url>https://maven.repository.redhat.com/ga</url>
+              <releases>
+                <enabled>true</enabled>
+              </releases>
+              <snapshots>
+                <enabled>true</enabled>
+              </snapshots>
+            </pluginRepository>
+          </pluginRepositories>
+        </profile>
+      </profiles>
+
+      <activeProfiles>
+        <activeProfile>maven-main</activeProfile>
+      </activeProfiles>
+
+    </settings>
+kind: ConfigMap
+metadata:
+  name: maven-settings
