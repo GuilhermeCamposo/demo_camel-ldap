@@ -1,7 +1,7 @@
 kind: Deployment
 apiVersion: apps/v1
 metadata:
-  name: nexus3-self-managed
+  name: nexus3
   namespace: camel-k-ldap
   labels:
     app: nexus3
@@ -71,7 +71,7 @@ spec:
               subPath: nexus.properties
           terminationMessagePolicy: File
           image: registry.connect.redhat.com/sonatype/nexus-repository-manager
-      serviceAccount: nexus3-self-managed
+      serviceAccount: nexus3
       volumes:
         - name: nexus3-data
           persistentVolumeClaim:

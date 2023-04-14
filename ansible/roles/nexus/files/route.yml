@@ -1,13 +1,13 @@
 kind: Route
 apiVersion: route.openshift.io/v1
 metadata:
-  name: nexus3-self-managed
+  name: nexus3
   labels:
     app: nexus3
 spec:
   to:
     kind: Service
-    name: nexus3-self-managed
+    name: nexus3
     weight: 100
   port:
     targetPort: 8081

@@ -54,7 +54,7 @@
 
     - name: Include Nexus role
       ansible.builtin.include_role:
-        name: Nexus
+        name: nexus
 
     - name: Include Camel K role
       ansible.builtin.include_role:

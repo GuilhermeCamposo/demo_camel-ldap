@@ -1,7 +1,7 @@
 kind: Service
 apiVersion: v1
 metadata:
-  name: nexus3-self-managed
+  name: nexus3
   labels:
     app: nexus3
 spec:
