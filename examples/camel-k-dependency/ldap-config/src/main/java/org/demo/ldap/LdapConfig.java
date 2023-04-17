@@ -16,7 +16,7 @@ public class LdapConfig {
     private static final Logger LOG = Logger.getLogger(LdapConfig.class);
 
     @Produces()
-    @Named("ldapBean")
+    @Named("ldapConfigBean")
     public InitialDirContext LdapBean() throws NamingException {
 
         LOG.info("setting LDAP Server Properties");

@@ -8,14 +8,15 @@ import javax.inject.Named;
 import org.jboss.logging.Logger;
 import javax.naming.NamingException;
 import javax.naming.directory.InitialDirContext;
+
 @Dependent
 @Unremovable
 public class LdapConfig {
 
-    private static final Logger LOG = Logger.getLogger(LDAPConfig.class);
+    private static final Logger LOG = Logger.getLogger(LdapConfig.class);
 
     @Produces()
-    @Named("ldapbean")
+    @Named("ldapConfigBean")
     public InitialDirContext LDAPBean() throws NamingException {
 
         LOG.info("setting LDAP Server Properties");

@@ -1,6 +1,7 @@
 // camel-k: language=java
 // camel-k: dependency=camel-ldap
-// camel-k: dependency=mvn:org.demo.ldap:ldap-config:1.0.1
+// camel-k: dependency=mvn:org.demo.ldap:ldap-config:1.0.2
+// camel-k: open-api=file:openapi.json
 
 import org.apache.camel.model.dataformat.JsonLibrary;
 import org.apache.camel.model.rest.RestBindingMode;
@@ -13,22 +14,28 @@ public class LdapRoute extends RouteBuilder {
 
   @Override
   public void configure() throws Exception {
-    
-    restConfiguration().bindingMode(RestBindingMode.off);
 
-    rest("/ldap")
-        .get()
-            .produces("application/json")
-            .to("direct:ldap-route");
-
-    from("direct:ldap-route")
-    .routeId("ldap-route")
+    from("direct:getQuery")
+    .routeId("getQuery")
     .setBody(simple("${header.query}"))
-    .to("ldap:ldapBean?base='ou=users,dc=example,dc=org'")
-    .process(new LdapProcessor())
-    .marshal().json(JsonLibrary.Jackson)
-    .log("Result: ${body}")
-    .setHeader(Exchange.HTTP_RESPONSE_CODE, constant(200));
+    .to("ldap:ldapConfigBean?base='ou=users,dc=example,dc=org'")
+    .to("bean:ldapProcessorBean")
+    .choice()
+        .when(simple("${body.isEmpty()}"))
+            .setHeader(Exchange.HTTP_RESPONSE_CODE, constant(404))
+            .setBody(constant(""))
+        .otherwise()
+            .marshal().json(JsonLibrary.Jackson)
+            .log("Result: ${body}")
+            .setHeader(Exchange.HTTP_RESPONSE_CODE, constant(200))
+    .endChoice();
+
+    from("direct:getHealth")
+    .routeId("getHealth")
+    .setBody(simple("cn=user01"))
+    .to("ldap:ldapConfigBean?base='ou=users,dc=example,dc=org'")
+    .setHeader(Exchange.HTTP_RESPONSE_CODE, constant(200))
+    .setBody(constant("running"));
 
   }
 

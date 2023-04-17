@@ -1,0 +1,44 @@
+# camel-k: language=yaml
+# camel-k: dependency=camel-ldap
+# camel-k: dependency=mvn:org.demo.ldap:ldap-config:1.0.2
+# camel-k: open-api=file:openapi.json
+
+# Get Query Operation
+- from:
+    uri: "direct:getQuery"
+    steps:
+      - setBody:
+          simple: "${header.query}"
+      - to: "ldap:ldapConfigBean?base='ou=users,dc=example,dc=org'"
+      - to: "bean:ldapProcessorBean"
+      - choice:
+          when:
+            - simple: "${body.isEmpty()}"
+              steps:
+                - set-header:
+                    name: "CamelHttpResponseCode"
+                    constant: "404"
+                - set-body:
+                    constant: ""
+          otherwise:
+            steps:
+              - marshal:
+                  json:
+                    library: Jackson
+              - log: "Result: ${body}"
+              - set-header:
+                  name: "CamelHttpResponseCode"
+                  constant: "200"
+            
+# Get Health Operations
+- from:
+    uri: "direct:getHealth"
+    steps:
+      - setBody:
+          constant: "cn=user01"
+      - to: "ldap:ldapConfigBean?base='ou=users,dc=example,dc=org'"
+      - set-header:
+          name: "CamelHttpResponseCode"
+          constant: "200"
+      - set-body:
+          constant: "running"

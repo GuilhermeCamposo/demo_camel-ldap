@@ -1,0 +1,49 @@
+{
+    "openapi": "3.0.2",
+    "info": {
+        "title": "New API",
+        "version": "1.0.0",
+        "description": "A brand new API with no content.  Go nuts!"
+    },
+    "paths": {
+        "/ldap": {
+            "description": "Simple example of exposing API to access a LDAP server",
+            "get": {
+                "parameters": [
+                    {
+                        "name": "query",
+                        "description": "LDAP query",
+                        "schema": {
+                            "type": "string"
+                        },
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "content": {
+                            "application/json": {}
+                        },
+                        "description": "found entries"
+                    },
+                    "404": {
+                        "description": "entries not found."
+                    }
+                },
+                "operationId": "getQuery",
+                "description": "run a LDAP query and get the result as json"
+            }
+        },
+        "/ldap/health": {
+            "get": {
+                "responses": {
+                    "200": {
+                        "description": "LDAP server is accessible."
+                    }
+                },
+                "operationId": "getHealth"
+            }
+        }
+    }
+}

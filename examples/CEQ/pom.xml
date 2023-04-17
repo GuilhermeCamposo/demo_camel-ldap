@@ -37,6 +37,14 @@
   <dependencies>
     <dependency>
       <groupId>org.apache.camel.quarkus</groupId>
+      <artifactId>camel-quarkus-xml-io-dsl</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.camel.quarkus</groupId>
+      <artifactId>camel-quarkus-language</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.camel.quarkus</groupId>
       <artifactId>camel-quarkus-core</artifactId>
     </dependency>
     <dependency>
@@ -60,6 +68,10 @@
       <artifactId>camel-quarkus-timer</artifactId>
     </dependency>
     <dependency>
+      <groupId>org.apache.camel.quarkus</groupId>
+      <artifactId>camel-quarkus-bean</artifactId>
+    </dependency>
+    <dependency>
       <groupId>io.quarkus</groupId>
       <artifactId>quarkus-arc</artifactId>
     </dependency>
@@ -71,6 +83,24 @@
   </dependencies>
   <build>
     <plugins>
+      <plugin>
+        <groupId>org.apache.camel</groupId>
+        <artifactId>camel-restdsl-openapi-plugin</artifactId>
+        <version>3.20.0</version>
+        <executions>
+          <execution>
+            <id>simple</id>
+            <goals>
+              <goal>generate-xml</goal>
+            </goals>
+            <configuration>
+              <specificationUri>src/main/resources/openapi.json</specificationUri>
+              <restConfiguration>false</restConfiguration>
+              <outputDirectory>${project.build.directory}/classes/org/demo/ldap</outputDirectory>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
       <plugin>
         <groupId>${quarkus.platform.group-id}</groupId>
         <artifactId>quarkus-maven-plugin</artifactId>

@@ -1,7 +1,11 @@
 package org.demo.ldap;
 
 import org.apache.camel.Exchange;
-import org.apache.camel.Processor;
+
+import io.quarkus.arc.Unremovable;
+
+import javax.enterprise.context.ApplicationScoped;
+import javax.inject.Named;
 import javax.naming.NamingEnumeration;
 import javax.naming.directory.Attribute;
 import javax.naming.directory.SearchResult;
@@ -9,13 +13,17 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-public class LdapProcessor implements Processor {
-    @Override
+@ApplicationScoped
+@Unremovable
+@Named("ldapProcessorBean")
+public class LdapProcessor {
+
+    
     public void process(Exchange exchange) throws Exception {
         ArrayList<SearchResult> body = exchange.getIn().getBody(ArrayList.class);
-        List<HashMap<String,Object>> records = new ArrayList<> ();
 
-        if(body != null){
+        if(body != null && !body.isEmpty()  ){
+            List<HashMap<String,Object>> records = new ArrayList<> ();
             for(SearchResult result : body){
                 NamingEnumeration enumeration = result.getAttributes().getAll();
                 HashMap<String,Object>  map = new HashMap<>();
@@ -26,7 +34,8 @@ public class LdapProcessor implements Processor {
                 }
                 records.add(map);
             }
+            exchange.getIn().setBody(records);
         }
-        exchange.getIn().setBody(records);
+        
     }
 }
