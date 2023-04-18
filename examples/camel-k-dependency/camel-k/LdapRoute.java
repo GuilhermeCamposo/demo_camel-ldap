@@ -32,7 +32,7 @@ public class LdapRoute extends RouteBuilder {
 
     from("direct:getHealth")
     .routeId("getHealth")
-    .setBody(simple("cn=user01"))
+    .setBody(constant("cn=user01"))
     .to("ldap:ldapConfigBean?base='ou=users,dc=example,dc=org'")
     .setHeader(Exchange.HTTP_RESPONSE_CODE, constant(200))
     .setBody(constant("running"));

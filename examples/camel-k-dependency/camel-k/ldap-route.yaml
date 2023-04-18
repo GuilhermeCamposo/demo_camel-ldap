@@ -30,7 +30,7 @@
                   name: "CamelHttpResponseCode"
                   constant: "200"
             
-# Get Health Operations
+# Get Health Operation
 - from:
     uri: "direct:getHealth"
     steps:
