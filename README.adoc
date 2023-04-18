@@ -1,6 +1,22 @@
 = Camel LDAP Demo
 
+== Environment
 
+- Tested on OCP 4.12
 
+== Installation
 
+=== Parameters
+
+[options="header"]
+|=======================
+| Parameter | Example Value                                      | Definition
+| token     | sha256~vFanQbthlPKfsaldJT3bdLXIyEkd7ypO_XPygY1DNtQ | access token for a user with cluster-admin privileges
+| server    | https://api.mycluster.domain.com:6443              | OpenShift cluster API URL
+|=======================
+
+===  How to run the playbook
+
+----
 ansible-playbook -e token=${token} -e server=${server} playbook.yml
+----
