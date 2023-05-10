@@ -35,3 +35,17 @@ This demo has 3 different implementations. Each one of them will require differe
 
 All the examples will expose the same REST interface that is described in the open-api schema created using Apicurito.
 So use curl to list objects saved on the LDAP container.
+
+Example calls: 
+
+* Query specific user:
+
+----
+curl --location 'http://ldap-route-camel-k-ldap.apps.{domain}/ldap?query=cn%3Duser01'
+----
+
+* Health endpoint
+
+----
+curl --location 'http://ldap-route-camel-k-ldap.apps.{domain}/ldap/health'
+----
