@@ -1,4 +1,6 @@
-= Camel LDAP Demo
+= Camel LDAP Demo 
+
+Demonstration on how to use Camel K and Camel Extensions for Quarkus to run the https://camel.apache.org/components/3.20.x/ldap-component.html[ldap component]. 
 
 == Environment
 
@@ -20,3 +22,16 @@
 ----
 ansible-playbook -e token=${token} -e server=${server} playbook.yml
 ----
+
+== How to run the demo
+
+This demo has 3 different implementations. Each one of them will require different steps. For more info: 
+
+* link:examples/camel-k-single-file/README.adoc[Camel K Single File]
+* link:examples/camel-k-dependency/README.adoc[Camel K Dependency]
+* link:examples/CEQ/README.adoc[Camel Extension for Quarkus]
+
+== How to test 
+
+All the examples will expose the same REST interface that is described in the open-api schema created using Apicurito.
+So use curl to list objects saved on the LDAP container.

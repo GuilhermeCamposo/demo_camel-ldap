@@ -1,0 +1,24 @@
+= Camel K Dependency
+
+Example on how to use https://camel.apache.org/camel-k/1.12.x/traits/dependencies.html#_configuration[Camel K's dependency trait] to add custom dependencies.
+
+== Deploying it
+
+Once the automation is done you can start the following steps
+
+=== Configuring Nexus 
+
+* Use `admin/admin123` to log in Nexus
+* Enable anonymous access
+* Create a new repository (maven2) called `camel-k`
+* You need to package `ldap-config`. To do so, run `mvn package` on `ldap-config` folder
+* Upload the jar file to `camel-k` repository
+
+== Deploy the route
+
+In the `camel-k-dependecy/camel-k` run:
+
+----
+oc project camel-k-ldap
+kamel run ldap-route.yaml
+----

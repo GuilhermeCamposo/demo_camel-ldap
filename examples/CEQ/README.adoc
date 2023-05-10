@@ -1,0 +1,17 @@
+= Camel Extensions for Quarkus
+
+Example on how to use Camel with Quarkus.
+
+== Deploying it
+
+Once the automation is done you can start the following steps
+
+
+== Deploy the route
+
+In the `CEQ` directory run:
+
+----
+oc project camel-k-ldap
+mvn clean package -Dquarkus.kubernetes.deploy=true -Dquarkus.kubernetes-client.trust-certs=true
+----
