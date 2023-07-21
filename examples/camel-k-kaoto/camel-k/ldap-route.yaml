@@ -1,0 +1,37 @@
+# camel-k: language=yaml
+# camel-k: dependency=camel-ldap
+# camel-k: dependency=mvn:org.demo.ldap:ldap-config:1.0.2
+# camel-k: open-api=file:openapi.json
+
+- route:
+    id: get-query
+    from:
+      uri: direct:getQuery
+      parameters:
+        failIfNoConsumers: false
+      steps:
+      - set-body:
+          simple: ${header.query}
+      - to:
+          uri: ldap:ldapConfigBean
+          parameters:
+            base: ou=users,dc=example,dc=org
+      - to:
+          uri: bean:ldapProcessorBean
+      - choice:
+          when:
+          - simple: ${body.isEmpty()}
+            steps:
+            - set-header:
+                constant: '404'
+                name: CamelHttpResponseCode
+            - set-body:
+                constant: ''
+          otherwise:
+            steps:
+            - marshal:
+                json:
+                  library: Jackson
+            - set-header:
+                constant: '200'
+                name: CamelHttpResponseCode
