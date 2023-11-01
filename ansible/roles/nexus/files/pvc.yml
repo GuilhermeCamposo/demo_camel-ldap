@@ -1,7 +1,7 @@
 kind: PersistentVolumeClaim
 apiVersion: v1
 metadata:
-  name: nexus3-test
+  name: nexus3-data
   finalizers:
     - kubernetes.io/pvc-protection  
 spec:
@@ -10,5 +10,4 @@ spec:
   resources:
     requests:
       storage: 10Gi
-  storageClassName: gp3-csi
   volumeMode: Filesystem

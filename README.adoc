@@ -40,12 +40,8 @@ Example calls:
 
 * Query specific user:
 
-----
-curl --location 'http://ldap-route-camel-k-ldap.apps.{domain}/ldap?query=cn%3Duser01'
-----
-
-* Health endpoint
+LDAP_ROUTE=$(oc get route ldap-route -n camel-k-ldap -o jsonpath='{.spec.host}')
 
 ----
-curl --location 'http://ldap-route-camel-k-ldap.apps.{domain}/ldap/health'
+curl --location "http://$LDAP_ROUTE/ldap?query=cn%3Duser01"
 ----

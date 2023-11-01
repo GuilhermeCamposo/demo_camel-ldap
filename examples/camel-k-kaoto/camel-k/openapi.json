@@ -34,16 +34,6 @@
                 "operationId": "getQuery",
                 "description": "run a LDAP query and get the result as json"
             }
-        },
-        "/ldap/health": {
-            "get": {
-                "responses": {
-                    "200": {
-                        "description": "LDAP server is accessible."
-                    }
-                },
-                "operationId": "getHealth"
-            }
         }
     }
 }

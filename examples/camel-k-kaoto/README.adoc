@@ -20,5 +20,7 @@ In the `camel-k-dependecy/camel-k` run:
 
 ----
 oc project camel-k-ldap
-kamel run ldap-route.yaml
+kamel run ldap-route.yaml -d camel-ldap -d mvn:org.demo.ldap:ldap-config:1.0.2 --open-api file:openapi.json
 ----
+
+
