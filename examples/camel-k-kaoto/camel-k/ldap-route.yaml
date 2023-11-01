@@ -6,27 +6,27 @@
         failIfNoConsumers: false
       steps:
       - set-body:
-          simple: ${header.query}
+          simple: "${header.query}"
       - to:
           uri: ldap:ldapConfigBean
           parameters:
-            base: ou=users,dc=example,dc=org
+            base: "ou=users,dc=example,dc=org"
       - to:
           uri: bean:ldapProcessorBean
       - choice:
           when:
-          - simple: ${body.isEmpty()}
+          - simple: "${body.isEmpty()}"
             steps:
             - set-header:
-                constant: '404'
+                constant: 404
                 name: CamelHttpResponseCode
             - set-body:
-                constant: ''
+                constant: ""
           otherwise:
             steps:
             - marshal:
                 json:
                   library: Jackson
             - set-header:
-                constant: '200'
+                constant: 200
                 name: CamelHttpResponseCode
