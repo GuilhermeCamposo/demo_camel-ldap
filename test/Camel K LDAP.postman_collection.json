@@ -1,0 +1,102 @@
+{
+	"info": {
+		"_postman_id": "2ce0f11a-442c-4d26-8b56-cc67c95cb108",
+		"name": "Camel K LDAP",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "720292"
+	},
+	"item": [
+		{
+			"name": "Query LDAP - local",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/ldap?query=cn=user01",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"ldap"
+					],
+					"query": [
+						{
+							"key": "query",
+							"value": "cn=user01"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Query LDAP OCP",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{ocp-route}}/ldap?query=cn=user01",
+					"host": [
+						"{{ocp-route}}"
+					],
+					"path": [
+						"ldap"
+					],
+					"query": [
+						{
+							"key": "query",
+							"value": "cn=user01"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Query LDAP Health OCP",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{ocp-route}}/ldap/health",
+					"host": [
+						"{{ocp-route}}"
+					],
+					"path": [
+						"ldap",
+						"health"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "ocp-route",
+			"value": ""
+		}
+	]
+}
